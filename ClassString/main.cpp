@@ -22,26 +22,26 @@ public:
 	{
 		return size;
 	}
-	explicit String(int size = 80)
+	explicit String(int size = 80):size(size), str(new char[size] {})
 	{
-		this->size = size;
-		this->str = new char[size] {};//Память, выделемую для строки обязательно нужно занулить.
+		/*this->size = size;
+		this->str = new char[size] {};*///Память, выделемую для строки обязательно нужно занулить.
 		std::cout << "SizeConstructor:\t" << this << std::endl;
 	}
 
-	String(const char str[])
+	String(const char str[]):size(strlen(str) + 1),str(new char[size] {})
 	{
-		this->size=strlen(str) + 1;
-		this->str = new char[size] {};
+		/*this->size=strlen(str) + 1;
+		this->str = new char[size] {};*/
 		for (int i = 0; i < str[i]; i++)
 			this->str[i] = str[i];
 		
 		std::cout << "Constructor:\t" << this << std::endl;
 	}
-	String(const String& other)
+	String(const String& other):size(other.size), str(new char[size] {})
 	{
-		this->size = other.size;
-		this->str = new char[size] {};
+		/*this->size = other.size;
+		this->str = new char[size] {};*/
 		for (int i = 0; i < size; i++)
 			this->str[i] = other.str[i];
 		std::cout << "CopyConstructor:\t" << this << std::endl;
@@ -126,6 +126,7 @@ std::istream& getline(std::istream& is, String& obj)
 }
 //#define CONSTRUCTORS_CHECK
 //#define OPERATORS_CHECK
+//#define INPUT_CHECK
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -162,9 +163,26 @@ void main()
 	std::cout << delimiter << std::endl;
 #endif // OPERATORS_CHECK
 
+#ifdef INPUT_CHECK
 	String str;
-	std::cout <<"Введите строку: " << std::endl;
+	std::cout << "Введите строку: " << std::endl;
 	//std::cin >> str;
 	getline(std::cin, str);
 	std::cout << str << std::endl;
+#endif // INPUT_CHECK
+
+	String str1;
+	str1.print();
+	String str2 = "Hello";
+	str2.print();
+	String str3 = str2;
+	str3.print();
+	String str4();
+	//str4.print(); функция, а не объект
+	String str5{};
+	str5.print();
+
+	String str6("World");
+	String str7{ "Planet" };
+
 }
