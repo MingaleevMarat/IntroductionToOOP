@@ -29,7 +29,7 @@ public:
 		std::cout << "SizeConstructor:\t" << this << std::endl;
 	}
 
-	String(const char str[]):size(strlen(str) + 1),str(new char[size] {})
+	String(const char str[]):String(strlen(str)+1)
 	{
 		/*this->size=strlen(str) + 1;
 		this->str = new char[size] {};*/
@@ -38,12 +38,12 @@ public:
 		
 		std::cout << "Constructor:\t" << this << std::endl;
 	}
-	String(const String& other):size(other.size), str(new char[size] {})
+	String(const String& other):String(other.str)
 	{
 		/*this->size = other.size;
-		this->str = new char[size] {};*/
+		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
-			this->str[i] = other.str[i];
+			this->str[i] = other.str[i];*/
 		std::cout << "CopyConstructor:\t" << this << std::endl;
 	}
 	~String()
