@@ -1,6 +1,10 @@
 #include<iostream>
 
 #define delimiter "\n---------------------------------\n"
+
+
+/// //////////////// Class declaration- Объявление класса///////////////////
+
 class String;
 String operator+(const String& left, const String& right);
 class String
@@ -9,87 +13,118 @@ class String
 	char* str;
 public:
 
-	 const char* get_str()const
-	{
-		return str;
-	}
+	const char* get_str()const;
 
-	 char* get_str()
-	 {
-		 return str;
-	 }
-	int get_size()const
-	{
-		return size;
-	}
-	explicit String(int size = 80):size(size), str(new char[size] {})
-	{
-		/*this->size = size;
-		this->str = new char[size] {};*///Память, выделемую для строки обязательно нужно занулить.
-		std::cout << "SizeConstructor:\t" << this << std::endl;
-	}
+	char* get_str();
+	int get_size()const;
+	explicit String(int size = 80);
 
-	String(const char str[]):String(strlen(str)+1)
-	{
-		/*this->size=strlen(str) + 1;
-		this->str = new char[size] {};*/
-		for (int i = 0; i < str[i]; i++)
-			this->str[i] = str[i];
-		
-		std::cout << "Constructor:\t" << this << std::endl;
-	}
-	String(const String& other):String(other.str)
-	{
-		/*this->size = other.size;
-		this->str = new char[size] {};
-		for (int i = 0; i < size; i++)
-			this->str[i] = other.str[i];*/
-		std::cout << "CopyConstructor:\t" << this << std::endl;
-	}
-	~String()
-	{
-		delete[] str;
-		std::cout << "Destructor:\t" << this << std::endl;
-	}
+	String(const char str[]);
+	String(const String& other);
+	~String();
 
 	//                 Operators:
 	
-	String& operator=(const String& other)
-	{
-		if (this == &other)
-			return* this;
-		delete[] this->str;
-		this->size = other.size;
-		this->str = new char[size] {};
-		for (int i = 0; i < size; i++)
-			this->str[i] = other.str[i];
-		std::cout << "CopyAssignmed:\t" << this << std::endl;
-		return* this;
-	}
+	String& operator=(const String& other);
 
-	String& operator+=(const String& other)
-	{
-		return* this = *this + other;
-	}
-	const char& operator[](int i)const
-	{
-		return str[i];
-	}
+	String& operator+=(const String& other);
+	const char& operator[](int i)const;
 
-	 char& operator[](int i)
-	{
-		return str[i];
-	}
+	char& operator[](int i);
 
 	//                 Meetods:
 
-	void print()const
-	{
-		std::cout << "Size:\t" << size << std::endl;
-		std::cout << "Str:\t" << str << std::endl;
-	}
+	void print()const;
 };
 
+////////////////// Class declaration end - Конец объявления класса///////////////
+
+
+
+
+
+///////////////// Class definition - Определение класса////////////////////
+// 
+// :: Оператор разрешения видимости (Scope operator)
+const char* String::get_str()const
+{
+	return str;
+}
+
+char* String::get_str()
+{
+	return str;
+}
+int String::get_size()const
+{
+	return size;
+}
+String::String(int size) :size(size), str(new char[size] {})
+{
+	/*this->size = size;
+	this->str = new char[size] {};*///Память, выделемую для строки обязательно нужно занулить.
+	std::cout << "SizeConstructor:\t" << this << std::endl;
+}
+
+String::String (const char str[]) :String(strlen(str) + 1)
+{
+	/*this->size=strlen(str) + 1;
+	this->str = new char[size] {};*/
+	for (int i = 0; i < str[i]; i++)
+		this->str[i] = str[i];
+
+	std::cout << "Constructor:\t" << this << std::endl;
+}
+String::String(const String& other) :String(other.str)
+{
+	/*this->size = other.size;
+	this->str = new char[size] {};
+	for (int i = 0; i < size; i++)
+		this->str[i] = other.str[i];*/
+	std::cout << "CopyConstructor:\t" << this << std::endl;
+}
+String::~String()
+{
+	delete[] str;
+	std::cout << "Destructor:\t" << this << std::endl;
+}
+
+//                 Operators:
+
+String& String::operator=(const String& other)
+{
+	if (this == &other)
+		return*this;
+	delete[] this->str;
+	this->size = other.size;
+	this->str = new char[size] {};
+	for (int i = 0; i < size; i++)
+		this->str[i] = other.str[i];
+	std::cout << "CopyAssignmed:\t" << this << std::endl;
+	return*this;
+}
+
+String& String::operator+=(const String& other)
+{
+	return*this = *this + other;
+}
+const char& String::operator[](int i)const
+{
+	return str[i];
+}
+
+char& String::operator[](int i)
+{
+	return str[i];
+}
+
+//                 Meetods:
+
+void String::print()const
+{
+	std::cout << "Size:\t" << size << std::endl;
+	std::cout << "Str:\t" << str << std::endl;
+}
 String operator+(const String& left, const String& right)
 {
 	String result(left.get_size() + right.get_size() - 1);
@@ -124,6 +159,10 @@ std::istream& getline(std::istream& is, String& obj)
 	obj = buffer;
 	return is;
 }
+
+///////// Class definition end - Конец определения класса////////////////
+
+
 //#define CONSTRUCTORS_CHECK
 #define OPERATORS_CHECK
 //#define INPUT_CHECK
