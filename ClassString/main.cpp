@@ -1,6 +1,8 @@
 #include<iostream>
 
 #define delimiter "\n---------------------------------\n"
+#define a std::cout
+#define b std::endl;
 class String;
 String operator+(const String& left, const String& right);
 class String
@@ -26,7 +28,7 @@ public:
 	{
 		this->size = size;
 		this->str = new char[size] {};//Память, выделемую для строки обязательно нужно занулить.
-		std::cout << "SizeConstructor:\t" << this << std::endl;
+		a << "SizeConstructor:\t" << this << b
 	}
 
 	String(const char str[])
@@ -36,7 +38,20 @@ public:
 		for (int i = 0; i < str[i]; i++)
 			this->str[i] = str[i];
 		
-		std::cout << "Constructor:\t" << this << std::endl;
+		a << "Constructor:\t" << this << b
+	}
+	String(String&& other)noexcept :size(other.size), str(other.str)
+	{
+		//MoveConstructor должен выполнять поврхностное копирование (Shallow copy)
+		/*this->size = other.size;
+		this->str = other.str;*/
+
+		//Зануляем другой объект, для того чтобы его память не смог удалить деструктор.
+		other.size = 0;
+		other.str = nullptr;
+		/*this->str = nullptr;
+		*this = std::move(other);*/
+		a << "MoveConstructor: "<<this << b
 	}
 	String(const String& other)
 	{
@@ -44,12 +59,12 @@ public:
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 			this->str[i] = other.str[i];
-		std::cout << "CopyConstructor:\t" << this << std::endl;
+		a<< "CopyConstructor:\t" << this << b
 	}
 	~String()
 	{
 		delete[] str;
-		std::cout << "Destructor:\t" << this << std::endl;
+		a << "Destructor:\t" << this << b
 	}
 
 	//                 Operators:
@@ -63,10 +78,26 @@ public:
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 			this->str[i] = other.str[i];
-		std::cout << "CopyAssignmed:\t" << this << std::endl;
+		a << "CopyAssignmed:\t" << this << b
 		return* this;
 	}
 
+	String& operator=(String&& other)/*: size(other.size)*/
+	{
+		if (this == &other)
+			return*this;
+		delete this->str;
+		this->size = other.size;
+		this->str = other.str;
+		other.size = 0;
+		other.str = nullptr;
+		a << "MoveAssignment: \t"<<this << b
+			return*this;
+	}
+	//Class(const Class& other); //CopyConstructor
+	//Class& operator=(const Class& other); //CopyAssignment
+	//Class(Class&& other);      //MoveConstructor
+	//Class& operator=(Class&& other);  //MoveAssignment
 	String& operator+=(const String& other)
 	{
 		return* this = *this + other;
@@ -85,8 +116,8 @@ public:
 
 	void print()const
 	{
-		std::cout << "Size:\t" << size << std::endl;
-		std::cout << "Str:\t" << str << std::endl;
+		a << "Size:\t" << size << b
+		a << "Str:\t" << str << b
 	}
 };
 
@@ -125,46 +156,47 @@ std::istream& getline(std::istream& is, String& obj)
 	return is;
 }
 //#define CONSTRUCTORS_CHECK
-//#define OPERATORS_CHECK
+#define OPERATORS_CHECK
 void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef CONSTRUCTORS_CHECK
 	String str1;
 	str1.print();
-	std::cout << str1 << std::endl;
+	a << str1 << b
 	String str2(25);
 	str2.print();
 
 	String str3 = "Hello";
 	str3 = str3;
-	std::cout << str3 << std::endl;
+	a << str3 << b
 
 	String str4 = str3;
-	std::cout << str4 << std::endl;
+	a << str4 << b
 
 	String str5;
 	str5 = str3;
-	std::cout << str5 << std::endl;
+	a << str5 << b
 #endif // CONSTRUCTORS_CHECK
 
 #ifdef OPERATORS_CHECK
 	String str1 = "Hello";
 	String str2 = "World";
-	std::cout << delimiter << std::endl;
-	String str3 = str1 + str2;
-	std::cout << delimiter << std::endl;
-	std::cout << str3 << std::endl;
-	std::cout << delimiter << std::endl;
+	a << delimiter << b
+		String str3;
+	str3 = str1 + str2;
+	a << delimiter << b
+	a << str3 << b
+	a << delimiter << b
 	str1 += str2;
-	std::cout << delimiter << std::endl;
-	std::cout << str1 << std::endl;
-	std::cout << delimiter << std::endl;
+	a << delimiter << b
+	a << str1 << b
+	a << delimiter << b
 #endif // OPERATORS_CHECK
 
-	String str;
-	std::cout <<"Введите строку: " << std::endl;
-	//std::cin >> str;
-	getline(std::cin, str);
-	std::cout << str << std::endl;
+	//String str;
+	//a <<"Введите строку: " << b
+	////std::cin >> str;
+	//getline(std::cin, str);
+	//a << str << b
 }
